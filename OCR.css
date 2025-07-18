@@ -1,0 +1,177 @@
+
+    body {
+      zoom: 0.95;
+      font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #d0e7fe 0%, #e7d6fb 100%);
+      position: relative;
+      height: 100vh;
+      overflow-x: hidden;
+      padding-top: 100px;
+    }
+
+    /* Animated blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: blob-move 24s infinite alternate ease-in-out;
+      z-index: 0;
+    }
+    .blob1 {
+      width: 350px; height: 350px;
+      background: linear-gradient(135deg, #b8f3ff 0%, #a7b8ff 100%);
+      top: -80px; left: -90px;
+      animation-delay: 0s;
+    }
+    .blob2 {
+      width: 300px; height: 300px;
+      background: linear-gradient(135deg, #eecfff 0%, #b6e0fe 100%);
+      bottom: -60px; right: -70px;
+      animation-delay: 6s;
+    }
+    .blob3 {
+      width: 220px; height: 220px;
+      background: linear-gradient(135deg, #aee6d8 0%, #f3e7ff 100%);
+      top: 60vh; left: 60vw;
+      animation-delay: 12s;
+    }
+    @keyframes blob-move {
+      0% { transform: scale(1) translateY(0) translateX(0);}
+      50% { transform: scale(1.15) translateY(30px) translateX(30px);}
+      100% { transform: scale(1) translateY(0) translateX(0);}
+    }
+
+    /* Glassmorphism */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border-radius: 2rem;
+      border: 1.2px solid rgba(255,255,255,0.25);
+    }
+
+    /* Stylish file input */
+    .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .inputfile + label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      color: #6d6fd3;
+      background: linear-gradient(90deg, #e6e9f8 0%, #d1f7ff 100%);
+      border-radius: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px 0 rgba(109,111,211,0.08);
+      border: 1.1px solid #e2e6f7;
+      font-size: 1rem;
+    }
+    .inputfile:focus + label,
+    .inputfile + label:hover {
+      background: linear-gradient(90deg, #d1f7ff 0%, #e6e9f8 100%);
+      color: #3bb7c3;
+      box-shadow: 0 4px 18px 0 rgba(109,111,211,0.12);
+    }
+
+    /* Scan button animation */
+    .scan-btn {
+      background: linear-gradient(90deg, #6d6fd3 0%, #47c0e6 100%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.2rem;
+      padding: 0.9rem 0;
+      border: none;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px 0 rgba(109,111,211,0.09);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.18s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
+      outline: none;
+    }
+    .scan-btn:before {
+      content: "";
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 0; height: 0;
+      border-radius: 100%;
+      background: rgba(255,255,255,0.18);
+      transform: translate(-50%,-50%);
+      transition: width 0.4s ease, height 0.4s ease;
+      z-index: 0;
+    }
+    .scan-btn:active:before {
+      width: 220%;
+      height: 300%;
+    }
+    .scan-btn span {
+      position: relative;
+      z-index: 1;
+    }
+    .scan-btn:hover {
+      background: linear-gradient(90deg, #47c0e6 0%, #6d6fd3 100%);
+      box-shadow: 0 8px 36px 0 rgba(77,190,230,0.20);
+      animation: scan-pulse 1.2s infinite;
+    }
+    @keyframes scan-pulse {
+      0% { box-shadow: 0 8px 36px 0 rgba(77,190,230,0.18);}
+      50% { box-shadow: 0 12px 54px 0 rgba(77,190,230,0.30);}
+      100% { box-shadow: 0 8px 36px 0 rgba(77,190,230,0.18);}
+    }
+
+    /* Fade-in animation for textarea */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeInUp 0.7s cubic-bezier(.4,0,.2,1) 0.2s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Download button */
+    .download-btn {
+      background: linear-gradient(90deg, #a7b8ff 0%, #47c0e6 100%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.8rem 0;
+      border: none;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 14px 0 rgba(109,111,211,0.09);
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.25s, transform 0.08s;
+      outline: none;
+    }
+    .download-btn:hover {
+      background: linear-gradient(90deg, #47c0e6 0%, #a7b8ff 100%);
+      box-shadow: 0 6px 24px 0 rgba(109,111,211,0.13);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .download-btn:active {
+      background: linear-gradient(90deg, #a7b8ff 0%, #47c0e6 100%);
+      transform: scale(0.97);
+    }
+    @media (max-width: 640px) {
+      .glass-card {
+        border-radius: 1.2rem;
+        padding: 1.5rem;
+      }
+      .blob1, .blob2, .blob3 {
+        width: 160px !important; height: 160px !important;
+        filter: blur(30px);
+      }
+    }

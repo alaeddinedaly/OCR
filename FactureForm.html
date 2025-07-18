@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Créer une facture | Invoice Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body {
+      font-family: 'Inter', sans-serif;
+      background: #f7fafc;
+      min-height: 100%;
+    }
+    body {
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    body.loaded {
+      opacity: 1;
+    }
+    /* Fade-in for card */
+    .card-animate {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s 0.2s cubic-bezier(.4,0,.2,1), transform 0.7s 0.2s cubic-bezier(.4,0,.2,1);
+    }
+    .card-animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Toast animation */
+    .toast-fade {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .toast-fade.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    ::placeholder {
+      color: #a0aec0;
+      opacity: 1;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Inter&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Toast -->
+<div id="toast" class="fixed top-6 right-6 z-50 toast-fade pointer-events-none">
+  <div class="bg-green-500 text-white px-5 py-3 rounded-xl shadow-lg font-semibold flex items-center gap-2">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <span id="toast-msg">Invoice saved!</span>
+  </div>
+</div>
+
+<main class="min-h-screen flex items-center justify-center px-2 py-12">
+  <section class="w-full max-w-3xl">
+    <div class="card-animate bg-white rounded-3xl shadow-xl px-8 py-10 md:py-12">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2 tracking-tight">Créer une facture</h1>
+      <p class="text-gray-500 mb-8">Remplissez les informations ci-dessous pour générer une nouvelle facture.</p>
+      <form id="invoice-form" autocomplete="off">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- INVOICE# -->
+          <div class="flex flex-col">
+            <label for="invoice_number" class="font-semibold text-gray-700 mb-1">INVOICE#</label>
+            <input type="text" id="invoice_number" name="invoice_number" required
+                   placeholder="e.g. 2024-001"
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Référence externe -->
+          <div class="flex flex-col">
+            <label for="reference_externe" class="font-semibold text-gray-700 mb-1">Référence externe</label>
+            <input type="text" id="reference_externe" name="reference_externe"
+                   placeholder="Référence externe"
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Montant -->
+          <div class="flex flex-col">
+            <label for="montant" class="font-semibold text-gray-700 mb-1">Montant</label>
+            <input type="text" id="montant" name="montant" required
+                   placeholder="Montant total"
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Date -->
+          <div class="flex flex-col">
+            <label for="date" class="font-semibold text-gray-700 mb-1">Date</label>
+            <input type="text" id="date" name="date" required
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Fournisseur -->
+          <div class="flex flex-col">
+            <label for="fournisseur" class="font-semibold text-gray-700 mb-1">Fournisseur</label>
+            <input type="text" id="fournisseur" name="fournisseur" required
+                   placeholder="Nom du fournisseur"
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Date échéance -->
+          <div class="flex flex-col">
+            <label for="date_echeance" class="font-semibold text-gray-700 mb-1">Date échéance</label>
+            <input type="text" id="date_echeance" name="date_echeance" required
+                   class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+          </div>
+          <!-- Status -->
+          <div class="flex flex-col">
+            <label for="status" class="font-semibold text-gray-700 mb-1">Statut</label>
+            <input type="text" id="status" name="status" required
+                    class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm bg-gray-50 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none" /></div>
+        </div>
+        <!-- Second row: Textareas, full width on all screens -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <!-- Conditions générales -->
+          <div class="flex flex-col">
+            <label for="conditions_generales" class="font-semibold text-gray-700 mb-1">Conditions générales</label>
+            <textarea id="conditions_generales" name="conditions_generales" rows="4"
+                      placeholder="Conditions, pénalités, etc."
+                      class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50 resize-none"></textarea>
+          </div>
+          <!-- Infos Client -->
+          <div class="flex flex-col">
+            <label for="infos_clients" class="font-semibold text-gray-700 mb-1">Infos Client</label>
+            <textarea id="infos_clients" name="infos_clients" rows="4"
+                      placeholder="Nom, adresse, etc."
+                      class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50 resize-none"></textarea>
+          </div>
+        </div>
+        <!-- Objet, full width -->
+        <div class="flex flex-col mt-6">
+          <label for="objet" class="font-semibold text-gray-700 mb-1">Objet</label>
+          <input type="text" id="objet" name="objet"
+                 placeholder="Objet de la facture"
+                 class="rounded-xl border border-gray-200 px-4 py-3 shadow-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition duration-200 outline-none bg-gray-50"/>
+        </div>
+        <!-- Actions -->
+        <div class="flex gap-4 mt-10 justify-end">
+          <button type="reset"
+                  class="px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold shadow-sm transition transform duration-200 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300 focus:outline-none">
+            Annuler
+          </button>
+          <button type="submit"
+                  class="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow-lg transition transform duration-200 hover:bg-blue-700 hover:scale-[1.03] focus:ring-2 focus:ring-blue-300 focus:outline-none flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Enregistrer
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Fade in the page and card
+  window.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('loaded');
+    setTimeout(() => {
+      document.querySelector('.card-animate').classList.add('visible');
+    }, 200);
+  });
+
+  // Toast notification logic
+  const toast = document.getElementById('toast');
+  function showToast(msg = "Invoice saved!") {
+    document.getElementById('toast-msg').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2300);
+  }
+
+  // Form submission
+  document.getElementById('invoice-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    showToast('Invoice saved!');
+    // Optionally clear the form after a delay
+    setTimeout(() => { this.reset(); }, 1300);
+  });
+</script>
+<script src="form.js"></script>
+</body>
+</html>
